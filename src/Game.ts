@@ -1,10 +1,17 @@
 import * as PIXI from "pixi.js";
 import KeyboardListener from "./KeyboardListener";
 import Application = PIXI.Application;
+import Player from "./Player";
+
+interface Updatables {
+    update: (delta: number) => void;
+}
 
 class Game {
 
     public app: Application;
+    public sprites: Updatables[];
+    public players: Player[];
     public keyboardListenter: KeyboardListener;
 
     constructor() {
@@ -12,6 +19,13 @@ class Game {
         document.getElementById('app').innerHTML = null;
         document.getElementById('app').appendChild(this.app.view);
         this.keyboardListenter = new KeyboardListener();
+        this.sprites = [];
+        this.players = [
+            new Player(50, this),
+            new Player(50, this),
+            new Player(50, this)
+        ];
+        this.players.forEach(player => this.app.stage.addChild(player.graphics));
     }
 }
 

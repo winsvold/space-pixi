@@ -1,20 +1,20 @@
-import Graphics = PIXI.Graphics;
 import Game from "./Game";
-import PolarCoordinate from "winsvold-coordinate/lib/PolarCoordinate";
-import BasicGraphics from "./Graphics";
 import {playerConfig} from "./playerConfig";
+import WeaponArsenal, {Stock} from "./Weapons/WeaponArsenal";
+import BasicGraphics from "./BasicGraphics";
+import Bullet from "./Weapons/Bullet";
 
-class Player extends BasicGraphics{
+class Player extends BasicGraphics {
     static playerCounter: number = 0;
-    private playerNumber: number;
+    public playerNumber: number;
+    private arsenal: WeaponArsenal;
+    private selectedWeapon: Stock | undefined;
 
     constructor(radius: number, game: Game) {
-        super();
+        super(game);
         this.size = 20;
-        this.game = game;
-        this.graphics = new Graphics();
-        this.velocity = new PolarCoordinate();
-        this.acceleration = new PolarCoordinate();
+        this.arsenal = new WeaponArsenal();
+        this.selectedWeapon = this.arsenal.weapons[0];
         this.keepObjectOnCanvas = true;
         this.restrictVelocityTo = 4;
         this.playerNumber = Player.playerCounter++;
@@ -29,22 +29,20 @@ class Player extends BasicGraphics{
         graphics.drawCircle(0, 0, radius);
         graphics.endFill();
         graphics.beginFill(0xDDDDDD);
-        graphics.drawCircle(radius, 0, radius/4);
+        graphics.drawCircle(radius, 0, radius / 4);
         graphics.endFill();
         graphics.x = 100;
         graphics.y = 100;
     }
 
     update(delta: number) {
-        super.update();
+        super.update(delta);
         this.updateAcceleration(delta);
     }
 
-    private updateAcceleration(delta: number) {
+    updateAcceleration(delta: number) {
         if (this.game.keyboardListenter.keys.includes(playerConfig[this.playerNumber].down)) {
-            if (this.acceleration.length > 0) {
-                this.acceleration.addToLength(-.002 * delta);
-            }
+            this.fireWeapon();
         }
         if (this.game.keyboardListenter.keys.includes(playerConfig[this.playerNumber].up)) {
             if (this.acceleration.length < .05) {
@@ -58,6 +56,20 @@ class Player extends BasicGraphics{
             this.acceleration.rotateRadians(.05 * delta)
         }
         this.acceleration.length *= 0.99;
+    }
+
+    fireWeapon() {
+        const selectedWeapon = this.selectedWeapon;
+        if (this.selectedWeapon.cooldown > performance.now()) {
+            return;
+        }
+        switch (selectedWeapon.weapon) {
+            case Bullet:
+                new Bullet(this);
+                selectedWeapon.cooldown = performance.now() + 200;
+                break;
+            default:
+        }
     }
 }
 

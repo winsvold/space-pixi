@@ -11,10 +11,16 @@ abstract class BasicGraphics {
     public keepObjectOnCanvas?: boolean;
     public restrictVelocityTo?: number;
 
-    abstract update (delta: number): void;
+    constructor(game: Game) {
+        this.game = game;
+        this.graphics = new Graphics();
+        this.velocity = new PolarCoordinate();
+        this.acceleration = new PolarCoordinate();
+    }
+
     abstract draw (): void;
 
-    update() {
+    update(delta: number) {
         this.restrictVelocity();
         this.keepOnCanvas();
 
