@@ -1,0 +1,21 @@
+{
+  "name": "space-pixi",
+  "version": "0.0.0",
+  "description": "a little game made with pixi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html",
+    "build": "parcel buil src/index.html"
+  },
+  "author": "Daniel Winsvold",
+  "license": "MIT",
+  "dependencies": {
+    "pixi.js": "^4.8.5",
+    "typescript": "^3.2.4",
+    "winsvold-coordinate": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/pixi.js": "^4.8.6"
+  }
+}
