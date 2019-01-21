@@ -4,6 +4,9 @@ import PolarCoordinate from "winsvold-coordinate/lib/PolarCoordinate";
 
 abstract class Weapon extends BasicGraphics {
     origin: Player;
+    duration: number = 4000;
+    size: number = 2;
+
     constructor(origin: Player) {
         super(origin.game);
         this.origin = origin;
@@ -14,7 +17,7 @@ abstract class Weapon extends BasicGraphics {
         this.game.sprites.push(this);
         setTimeout(
             () => this.remove(),
-            4000
+            this.duration - Math.random() * 500
         );
     }
 

@@ -12,12 +12,13 @@ class Player extends BasicGraphics {
 
     constructor(radius: number, game: Game) {
         super(game);
-        this.size = 20;
+        this.size = 15;
         this.arsenal = new WeaponArsenal();
         this.selectedWeapon = this.arsenal.weapons[0];
         this.keepObjectOnCanvas = true;
         this.restrictVelocityTo = 4;
         this.playerNumber = Player.playerCounter++;
+        this.acceleration.angle = Math.random() * Math.PI * 2;
         this.draw();
     }
 
@@ -31,8 +32,8 @@ class Player extends BasicGraphics {
         graphics.beginFill(0xDDDDDD);
         graphics.drawCircle(radius, 0, radius / 4);
         graphics.endFill();
-        graphics.x = 100;
-        graphics.y = 100;
+        graphics.x = this.game.app.view.width * Math.random();
+        graphics.y = this.game.app.view.height * Math.random();
     }
 
     update(delta: number) {
@@ -55,7 +56,7 @@ class Player extends BasicGraphics {
         if (this.game.keyboardListenter.keys.includes(playerConfig[this.playerNumber].right)) {
             this.acceleration.rotateRadians(.05 * delta)
         }
-        this.acceleration.length *= 0.99;
+        this.acceleration.length *= 0.95;
     }
 
     fireWeapon() {

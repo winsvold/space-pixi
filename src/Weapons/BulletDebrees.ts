@@ -1,14 +1,17 @@
 import Weapon from "./Weapon";
 import Player from "../Player";
 import {playerConfig} from "../playerConfig";
+import Bullet from "./Bullet";
 
 class BulletDebrees extends Weapon {
 
-    constructor(origin: Player) {
+    constructor(origin: Player, bullet: Bullet) {
         super(origin);
-        this.draw();
         this.velocity.length += 9 * Math.random();
         this.velocity.angle += Math.random() * Math.PI * 2;
+        this.graphics.x = bullet.graphics.x;
+        this.graphics.y = bullet.graphics.y;
+        this.draw();
     }
 
     draw() {

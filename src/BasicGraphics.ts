@@ -42,6 +42,7 @@ abstract class BasicGraphics {
         if (this.velocity.length < 0) {
             this.velocity.length = 0;
         }
+        this.velocity.length *= .995;
     }
 
     keepOnCanvas() {
