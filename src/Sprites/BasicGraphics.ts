@@ -1,11 +1,11 @@
 import PolarCoordinate from "winsvold-coordinate/lib/PolarCoordinate";
 import Graphics = PIXI.Graphics;
-import Game from "./Game";
+import Game from "../Game";
 
 abstract class BasicGraphics {
     public graphics: Graphics;
     public game: Game;
-    public size: number;
+    public size: number = 10;
     public velocity: PolarCoordinate;
     public acceleration: PolarCoordinate;
     public keepObjectOnCanvas?: boolean;
@@ -26,7 +26,6 @@ abstract class BasicGraphics {
 
         this.velocity.addCoordinate(this.acceleration);
 
-        this.graphics.rotation = this.acceleration.angle;
         const velocityCartesian = this.velocity.getCartesianCoordinate();
         this.graphics.x += velocityCartesian.x;
         this.graphics.y += velocityCartesian.y;

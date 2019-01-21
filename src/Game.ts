@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import KeyboardListener from "./KeyboardListener";
+import KeyboardListener from "./utils/KeyboardListener";
 import Application = PIXI.Application;
-import Player from "./Player";
+import Player from "./Sprites/Player/Player";
 
 interface Updatables {
     update: (delta: number) => void;

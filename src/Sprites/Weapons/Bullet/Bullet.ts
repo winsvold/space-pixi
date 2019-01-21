@@ -1,8 +1,7 @@
-import Weapon from "./Weapon";
-import Player from "../Player";
-import PolarCoordinate from "winsvold-coordinate/lib/PolarCoordinate";
-import {playerConfig} from "../playerConfig";
-import {boxesIntersect, circlesIntersect} from "../collisionDetect";
+import Weapon from "../Weapon";
+import Player from "../../Player/Player";
+import {playerConfig} from "../../Player/playerConfig";
+import { circlesIntersect} from "../../../utils/collisionDetect";
 import BulletDebrees from "./BulletDebrees";
 import Coordinate from "winsvold-coordinate/lib/Coordinate";
 
@@ -10,7 +9,7 @@ class Bullet extends Weapon {
 
     constructor(origin: Player) {
         super(origin);
-        let originAcceleration = new PolarCoordinate(this.origin.acceleration);
+        let originAcceleration = this.origin.acceleration.clone();
         originAcceleration.length = 8;
         this.velocity.addCoordinate(originAcceleration);
         this.velocity.angle += Math.random() * .1;
@@ -20,6 +19,7 @@ class Bullet extends Weapon {
         bulletCordinate.addCoordinate(originAcceleration);
         this.graphics.x = bulletCordinate.x;
         this.graphics.y = bulletCordinate.y;
+        const hei = 1;
         this.draw();
         this.sound();
     }
@@ -32,7 +32,7 @@ class Bullet extends Weapon {
         graphics.drawCircle(0, 0, radius);
     }
 
-    update(delta) {
+    update(delta: number) {
         super.update(delta);
         this.velocity.length *= 0.995;
         this.game.players.forEach(player => player !== this.origin && circlesIntersect(player, this) && this.hit(player))
@@ -42,14 +42,14 @@ class Bullet extends Weapon {
         for (let i = 0; i < 20; i++) {
             new BulletDebrees(player, this);
         }
-        let deltaVelocity = new PolarCoordinate(this.velocity);
+        let deltaVelocity = this.velocity.clone();
         deltaVelocity.length *= 0.1;
         player.velocity.addCoordinate(deltaVelocity);
         this.remove();
     }
 
     sound() {
-        const audioUrl = require('../../sounds/bullet.mp3');
+        const audioUrl = require('../../../../sounds/bullet.mp3');
         const audio = new Audio(audioUrl);
         audio.volume = .05;
         audio.play();

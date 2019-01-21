@@ -1,7 +1,7 @@
-import Weapon from "./Weapon";
-import Player from "../Player";
-import {playerConfig} from "../playerConfig";
-import Bullet from "./Bullet";
+import Weapon from "../Weapon";
+import Player from "../../Player/Player";
+import {playerConfig} from "../../Player/playerConfig";
+import Bullet from "./";
 
 class BulletDebrees extends Weapon {
 
