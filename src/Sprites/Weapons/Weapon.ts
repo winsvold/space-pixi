@@ -1,31 +1,14 @@
-import Player from "../Player/Player";
-import BasicGraphics from "../BasicGraphics";
+import Player from '../Player/Player';
 
-abstract class Weapon extends BasicGraphics {
-    origin: Player;
-    duration: number = 4000;
-    size: number = 2;
-    cooldown: number = 200;
+abstract class Weapon {
+    abstract cooldown: number;
+    public player: Player;
 
-    constructor(origin: Player) {
-        super(origin.game);
-        this.origin = origin;
-        this.velocity = this.origin.velocity.clone();
-        this.graphics.x = this.origin.graphics.x + this.origin.size * Math.cos(this.origin.acceleration.angle);
-        this.graphics.y = this.origin.graphics.y + this.origin.size * Math.sin(this.origin.acceleration.angle);
-        this.game.app.stage.addChild(this.graphics);
-        this.game.sprites.push(this);
-        setTimeout(
-            () => this.remove(),
-            this.duration - Math.random() * 500
-        );
+    constructor(player: Player) {
+        this.player = player;
     }
 
-    remove() {
-        this.game.app.stage.removeChild(this.graphics);
-        this.game.sprites = this.game.sprites.filter(sprite => sprite !== this);
-    }
+    abstract fire(): void;
 }
-
 
 export default Weapon;

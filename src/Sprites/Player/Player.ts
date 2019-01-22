@@ -1,8 +1,8 @@
 import Game from "../../Game";
-import {playerConfig} from "./playerConfig";
+import { playerConfig } from "./playerConfig";
 import BasicGraphics from "../BasicGraphics";
-import Bullet from "../Weapons/Bullet/Bullet";
-import Weapon from "../Weapons/Weapon";
+import Weapon from '../Weapons/Weapon';
+import Gun from '../Weapons/Gun';
 
 class Player extends BasicGraphics {
     static playerCounter: number = 0;
@@ -13,10 +13,8 @@ class Player extends BasicGraphics {
     constructor(radius: number, game: Game) {
         super(game);
         this.size = 15;
-        this.arsenal = [Bullet];
+        this.arsenal = [new Gun(this)];
         this.selectedWeapon = this.arsenal[0];
-        this.keepObjectOnCanvas = true;
-        this.restrictVelocityTo = 4;
         this.playerNumber = Player.playerCounter++;
         this.acceleration.angle = Math.random() * Math.PI * 2;
         this.draw();
@@ -38,8 +36,10 @@ class Player extends BasicGraphics {
 
     update(delta: number) {
         super.update(delta);
-        this.graphics.rotation = this.acceleration.angle;
         this.updateAcceleration(delta);
+        this.keepOnCanvas();
+        this.restrictVelocity(4);
+        this.graphics.rotation = this.acceleration.angle;
     }
 
     updateAcceleration(delta: number) {
@@ -61,17 +61,7 @@ class Player extends BasicGraphics {
     }
 
     fireWeapon() {
-        const selectedWeapon = this.selectedWeapon;
-        if (this.selectedWeapon.cooldown > performance.now()) {
-            return;
-        }
-        switch (selectedWeapon) {
-            case Bullet:
-                new Bullet(this);
-                selectedWeapon.cooldown = performance.now() + 200;
-                break;
-            default:
-        }
+        this.selectedWeapon && this.selectedWeapon.fire();
     }
 }
 

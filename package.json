@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel src/index.html",
-    "build": "parcel buil src/index.html"
+    "build": "npm run checkTypes && parcel build src/index.html",
+    "checkTypes": "tsc -p ./ -w --noEmit --pretty"
   },
   "author": "Daniel Winsvold",
   "license": "MIT",

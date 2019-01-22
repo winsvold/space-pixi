@@ -1,9 +1,9 @@
-import Weapon from "../Weapon";
+import Projectile from "../Projectile";
 import Player from "../../Player/Player";
 import {playerConfig} from "../../Player/playerConfig";
-import Bullet from "./";
+import Bullet from "./Bullet";
 
-class BulletDebrees extends Weapon {
+class BulletDebrees extends Projectile {
 
     constructor(origin: Player, bullet: Bullet) {
         super(origin);
@@ -22,7 +22,7 @@ class BulletDebrees extends Weapon {
         graphics.drawCircle(0, 0, radius);
     }
 
-    update(delta) {
+    update(delta: number) {
         super.update(delta);
         this.velocity.length *= 0.99;
     }
