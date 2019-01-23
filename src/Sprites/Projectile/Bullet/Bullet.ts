@@ -1,14 +1,17 @@
-import Weapon from "../Weapon";
+import Projectile from "../Projectile";
 import Player from "../../Player/Player";
 import {playerConfig} from "../../Player/playerConfig";
 import { circlesIntersect} from "../../../utils/collisionDetect";
 import BulletDebrees from "./BulletDebrees";
 import Coordinate from "winsvold-coordinate/lib/Coordinate";
+// @ts-ignore
+import audioUrl = require('../../../../sounds/bullet.mp3');
+import Weapon from '../../Weapons/Weapon';
 
-class Bullet extends Weapon {
+class Bullet extends Projectile {
 
-    constructor(origin: Player) {
-        super(origin);
+    constructor(origin: Weapon) {
+        super(origin.player);
         let originAcceleration = this.origin.acceleration.clone();
         originAcceleration.length = 8;
         this.velocity.addCoordinate(originAcceleration);
@@ -19,7 +22,6 @@ class Bullet extends Weapon {
         bulletCordinate.addCoordinate(originAcceleration);
         this.graphics.x = bulletCordinate.x;
         this.graphics.y = bulletCordinate.y;
-        const hei = 1;
         this.draw();
         this.sound();
     }
@@ -49,7 +51,6 @@ class Bullet extends Weapon {
     }
 
     sound() {
-        const audioUrl = require('../../../../sounds/bullet.mp3');
         const audio = new Audio(audioUrl);
         audio.volume = .05;
         audio.play();

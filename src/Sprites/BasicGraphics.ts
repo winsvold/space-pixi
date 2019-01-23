@@ -8,8 +8,6 @@ abstract class BasicGraphics {
     public size: number = 10;
     public velocity: PolarCoordinate;
     public acceleration: PolarCoordinate;
-    public keepObjectOnCanvas?: boolean;
-    public restrictVelocityTo?: number;
 
     constructor(game: Game) {
         this.game = game;
@@ -21,21 +19,16 @@ abstract class BasicGraphics {
     abstract draw (): void;
 
     update(delta: number) {
-        this.restrictVelocity();
-        this.keepOnCanvas();
-
-        this.velocity.addCoordinate(this.acceleration);
-
+        if (this.acceleration.length > 0) {
+            this.velocity.addCoordinate(this.acceleration);
+        }
         const velocityCartesian = this.velocity.getCartesianCoordinate();
-        this.graphics.x += velocityCartesian.x;
-        this.graphics.y += velocityCartesian.y;
+        this.graphics.x += velocityCartesian.x * delta;
+        this.graphics.y += velocityCartesian.y * delta;
     }
 
-    restrictVelocity() {
-        if (this.restrictVelocityTo === undefined) {
-            return;
-        }
-        if (this.velocity.length > this.restrictVelocityTo) {
+    restrictVelocity(restrictVelocityTo: number) {
+        if (this.velocity.length > restrictVelocityTo) {
             this.velocity.length *= .99;
         }
         if (this.velocity.length < 0) {
@@ -45,9 +38,6 @@ abstract class BasicGraphics {
     }
 
     keepOnCanvas() {
-        if (!this.keepObjectOnCanvas) {
-            return;
-        }
         if (this.graphics.x > this.game.app.view.width + this.size) {
             this.graphics.x = -this.size;
         }
