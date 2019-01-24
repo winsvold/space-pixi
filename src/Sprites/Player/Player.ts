@@ -40,6 +40,7 @@ class Player extends BasicGraphics {
         this.keepOnCanvas();
         this.restrictVelocity(4);
         this.graphics.rotation = this.acceleration.angle;
+        this.arsenal.forEach(weapon => weapon.update(delta));
     }
 
     updateAcceleration(delta: number) {

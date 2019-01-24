@@ -10,7 +10,7 @@ import Weapon from '../../Weapons/Weapon';
 
 class Bullet extends Projectile {
 
-    constructor(origin: Weapon) {
+    constructor(origin: Weapon, gunPlacement: number) {
         super(origin.player);
         let originAcceleration = this.origin.acceleration.clone();
         originAcceleration.length = 8;
@@ -18,7 +18,7 @@ class Bullet extends Projectile {
         this.velocity.angle += Math.random() * .1;
         let bulletCordinate = new Coordinate(this.origin.graphics.x, this.origin.graphics.y);
         originAcceleration.length = this.origin.size;
-        originAcceleration.rotateDegrees(Math.random() > .5 ? -90 : 90);
+        originAcceleration.rotateDegrees(gunPlacement);
         bulletCordinate.addCoordinate(originAcceleration);
         this.graphics.x = bulletCordinate.x;
         this.graphics.y = bulletCordinate.y;
