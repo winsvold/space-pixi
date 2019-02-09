@@ -6,20 +6,20 @@ class Gun extends Weapon {
     private alternate: number;
 
     constructor(player: Player) {
-        super(player, 20, 20, 50, .3);
+        super(player, 10, 10, 100, 0.3);
         this.alternate = -90;
         this.draw();
     }
 
     draw() {
         const graphics = this.graphics;
-        graphics.lineStyle(2, 0xFFFFFF, .5);
+        graphics.lineStyle(2, 0xffffff, 0.5);
         graphics.beginFill(0x000000);
-        graphics.drawRect(-5, this.player.size, 10, 5);
-        graphics.drawRect(-5, -this.player.size, 10, 5);
+        graphics.drawRect(-3, this.player.size, 6, 3);
+        graphics.drawRect(-3, -this.player.size, 6, 3);
         graphics.endFill();
-        graphics.x = -2.5;
-        graphics.y = -2.5;
+        graphics.x = -1.5;
+        graphics.y = -1.5;
     }
 
     fire(): void {

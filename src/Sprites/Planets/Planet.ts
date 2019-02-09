@@ -19,10 +19,12 @@ class Planet extends BasicGraphics {
     draw() {
         const radius = this.size;
         const graphics = this.graphics;
-        graphics.lineStyle(4, 0xffffff, 0.5);
+        graphics.lineStyle(20, 0xffffff, 0.5);
         graphics.beginFill(0xffff000);
         graphics.drawCircle(0, 0, radius);
         graphics.endFill();
+        const blur = new PIXI.filters.BlurFilter(5);
+        graphics.filters = [blur];
     }
 }
 

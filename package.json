@@ -25,7 +25,7 @@
     "dependencies": {
         "pixi.js": "^4.8.5",
         "typescript": "^3.2.4",
-        "winsvold-coordinate": "^0.3.2"
+        "winsvold-coordinate": "^0.3.3"
     },
     "devDependencies": {
         "@types/pixi.js": "^4.8.6",

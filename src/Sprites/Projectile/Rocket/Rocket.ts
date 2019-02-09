@@ -1,40 +1,43 @@
 import Projectile from '../Projectile';
+import Weapon from '../../Weapons/Weapon';
 import Player from '../../Player/Player';
+import PolarCoordinate from 'winsvold-coordinate/lib/PolarCoordinate';
 import { playerConfig } from '../../Player/playerConfig';
 import { circlesIntersect } from '../../../utils/collisionDetect';
-import BulletDebrees from './BulletDebrees';
-import Coordinate from 'winsvold-coordinate/lib/Coordinate';
-// @ts-ignore
-import audioUrl = require('../../../../sounds/bullet.mp3');
-import Weapon from '../../Weapons/Weapon';
 import { GravityMode } from '../../../utils/gravity';
+import BulletDebrees from '../Bullet/BulletDebrees';
+import MiniRocket from './MiniRocket';
 
-class Bullet extends Projectile {
-    constructor(origin: Weapon, gunPlacement: number) {
-        super(origin.player);
-        let originAcceleration = this.origin.acceleration.clone();
-        originAcceleration.length = 8;
-        this.velocity.addCoordinate(originAcceleration);
-        this.velocity.angle += Math.random() * 0.05;
-        let bulletCordinate = new Coordinate(
-            this.origin.graphics.x,
-            this.origin.graphics.y
-        );
-        originAcceleration.length = this.origin.size;
-        originAcceleration.rotateDegrees(gunPlacement);
-        bulletCordinate.addCoordinate(originAcceleration);
-        this.graphics.x = bulletCordinate.x;
-        this.graphics.y = bulletCordinate.y;
+class Rocket extends Projectile {
+    private target: Player;
+
+    constructor(origin: Weapon, target: Player) {
+        super(origin.player, 2000);
+        this.target = target;
+        this.velocity = this.origin.acceleration
+            .clone()
+            .withLength(5)
+            .addCoordinate(this.origin.velocity);
+        const rocketCordinate = this.origin
+            .getPosition()
+            .addCoordinate(
+                new PolarCoordinate(
+                    this.origin.size,
+                    this.origin.acceleration.angle
+                ).getCartesianCoordinate()
+            );
+        this.graphics.x = rocketCordinate.x;
+        this.graphics.y = rocketCordinate.y;
         this.draw();
-        this.sound();
         this.attractors = this.game.globalAttractors;
+        this.size = 3;
     }
 
     draw() {
         const radius = this.size;
         const graphics = this.graphics;
         graphics.lineStyle(
-            0.5,
+            1,
             playerConfig[this.origin.playerNumber].color,
             0.8
         );
@@ -45,6 +48,11 @@ class Bullet extends Projectile {
     update(delta: number) {
         super.update(delta);
         this.velocity.length *= 0.995;
+        const relativeToTarget = this.getPosition()
+            .getRelativePostitionTo(this.target.getPosition())
+            .withLength(0.06);
+        this.velocity.addCoordinate(relativeToTarget);
+        this.restrictVelocity(3);
         this.game.players.forEach(
             player =>
                 player !== this.origin &&
@@ -58,9 +66,16 @@ class Bullet extends Projectile {
                 this.remove()
         );
         const attraction = this.getCombinedAttractionFromAttractors(
-            GravityMode.STRONG_DECAY
+            GravityMode.WEAK_DECAY
         );
         this.velocity.addCoordinate(attraction);
+    }
+
+    remove() {
+        super.remove();
+        for (let i = 0; i < 10; i++) {
+            new MiniRocket(this, this.target, (i * Math.PI * 2) / 10);
+        }
     }
 
     hit(player: Player) {
@@ -72,12 +87,6 @@ class Bullet extends Projectile {
         player.velocity.addCoordinate(deltaVelocity);
         this.remove();
     }
-
-    sound() {
-        const audio = new Audio(audioUrl);
-        audio.volume = 0.05;
-        audio.play();
-    }
 }
 
-export default Bullet;
+export default Rocket;

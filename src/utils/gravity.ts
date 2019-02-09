@@ -96,9 +96,10 @@ export function getOrbitVelocity(
         attracted,
         attractor,
         GravityMode.NORMAL
-    ).getLength();
+    );
     const velocity =
-        Math.sqrt(attraction * radius) + (Math.random() - 0.5) * displacement;
+        Math.sqrt(attraction.getLength() * radius) +
+        (Math.random() - 0.5) * displacement;
     const directionRad = relativePosition.getRadians() - Math.PI / 2;
     return new PolarCoordinate(velocity, directionRad).getCartesianCoordinate();
 }

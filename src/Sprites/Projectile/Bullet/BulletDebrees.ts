@@ -1,12 +1,11 @@
 import Projectile from '../Projectile';
 import Player from '../../Player/Player';
 import { playerConfig } from '../../Player/playerConfig';
-import Bullet from './Bullet';
 import { GravityMode } from '../../../utils/gravity';
 import { circlesIntersect } from '../../../utils/collisionDetect';
 
 class BulletDebrees extends Projectile {
-    constructor(origin: Player, bullet: Bullet) {
+    constructor(origin: Player, bullet: Projectile) {
         super(origin);
         this.velocity.length += 9 * Math.random();
         this.velocity.angle += Math.random() * Math.PI * 2;
@@ -26,7 +25,7 @@ class BulletDebrees extends Projectile {
         );
         graphics.beginFill(0xffffff);
         graphics.drawCircle(0, 0, radius);
-        graphics.alpha = 0.4;
+        graphics.alpha = 0.2;
     }
 
     update(delta: number) {

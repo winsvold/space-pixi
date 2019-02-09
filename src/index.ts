@@ -11,7 +11,7 @@ const sun = new Planet(
     game,
     new Coordinate(window.innerWidth / 2, window.innerHeight / 2),
     50,
-    10
+    2
 );
 sun.addToGameQuick();
 game.globalAttractors.push(sun);

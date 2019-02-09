@@ -3,11 +3,12 @@ import BasicGraphics from '../BasicGraphics';
 
 abstract class Projectile extends BasicGraphics {
     origin: Player;
-    duration: number = 8000;
-    size: number = 2;
+    duration: number;
+    size: number = 1;
 
-    constructor(origin: Player) {
+    constructor(origin: Player, duration: number = 8000) {
         super(origin.game);
+        this.duration = duration;
         this.origin = origin;
         this.velocity = this.origin.velocity.clone();
         this.graphics.x =
