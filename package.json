@@ -1,22 +1,36 @@
 {
-  "name": "space-pixi",
-  "version": "0.0.0",
-  "description": "a little game made with pixi",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel src/index.html",
-    "build": "npm run checkTypes && parcel build src/index.html",
-    "checkTypes": "tsc -p ./ -w --noEmit --pretty"
-  },
-  "author": "Daniel Winsvold",
-  "license": "MIT",
-  "dependencies": {
-    "pixi.js": "^4.8.5",
-    "typescript": "^3.2.4",
-    "winsvold-coordinate": "^0.3.2"
-  },
-  "devDependencies": {
-    "@types/pixi.js": "^4.8.6"
-  }
+    "name": "space-pixi",
+    "version": "0.0.0",
+    "description": "a little game made with pixi",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "parcel src/index.html",
+        "build": "npm run checkTypes && parcel build src/index.html",
+        "checkTypes": "tsc -p ./ -w --noEmit --pretty"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts,tsx,json,css,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "author": "Daniel Winsvold",
+    "license": "MIT",
+    "dependencies": {
+        "pixi.js": "^4.8.5",
+        "typescript": "^3.2.4",
+        "winsvold-coordinate": "^0.3.2"
+    },
+    "devDependencies": {
+        "@types/pixi.js": "^4.8.6",
+        "husky": "^1.3.1",
+        "lint-staged": "^8.1.3",
+        "prettier": "^1.16.4"
+    }
 }

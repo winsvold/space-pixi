@@ -1,21 +1,26 @@
-import * as PIXI from "pixi.js";
-import KeyboardListener from "./utils/KeyboardListener";
-import Player from "./Sprites/Player/Player";
+import * as PIXI from 'pixi.js';
+import KeyboardListener from './utils/KeyboardListener';
+import Player from './Sprites/Player/Player';
 import Application = PIXI.Application;
+import BasicGraphics from './Sprites/BasicGraphics';
 
 interface Updatables {
     update: (delta: number) => void;
 }
 
 class Game {
-
     public app: Application;
     public sprites: Updatables[];
     public players: Player[];
     public keyboardListenter: KeyboardListener;
+    public globalAttractors: BasicGraphics[] = [];
 
     constructor() {
-        this.app = new PIXI.Application({width: window.innerWidth, height: window.innerHeight, antialias: true});
+        this.app = new PIXI.Application({
+            width: window.innerWidth,
+            height: window.innerHeight,
+            antialias: true,
+        });
         const root = document.getElementById('app');
         if (!root) {
             console.error('Could not find root element');
@@ -24,12 +29,10 @@ class Game {
         }
         this.keyboardListenter = new KeyboardListener();
         this.sprites = [];
-        this.players = [
-            new Player(this),
-            new Player(this),
-            new Player(this)
-        ];
-        this.players.forEach(player => this.app.stage.addChild(player.graphics));
+        this.players = [new Player(this), new Player(this), new Player(this)];
+        this.players.forEach(player =>
+            this.app.stage.addChild(player.graphics)
+        );
     }
 }
 

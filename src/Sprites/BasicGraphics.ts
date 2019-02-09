@@ -1,6 +1,8 @@
-import PolarCoordinate from "winsvold-coordinate/lib/PolarCoordinate";
+import PolarCoordinate from 'winsvold-coordinate/lib/PolarCoordinate';
 import Graphics = PIXI.Graphics;
-import Game from "../Game";
+import Game from '../Game';
+import Coordinate from 'winsvold-coordinate/lib/Coordinate';
+import { getAttractionFrom, GravityMode } from '../utils/gravity';
 
 abstract class BasicGraphics {
     public graphics: Graphics;
@@ -8,6 +10,8 @@ abstract class BasicGraphics {
     public size: number = 10;
     public velocity: PolarCoordinate;
     public acceleration: PolarCoordinate;
+    public mass: number = 1;
+    public attractors: BasicGraphics[] = [];
 
     constructor(game: Game) {
         this.game = game;
@@ -16,7 +20,21 @@ abstract class BasicGraphics {
         this.acceleration = new PolarCoordinate();
     }
 
-    abstract draw (): void;
+    abstract draw(): void;
+
+    getPosition() {
+        return new Coordinate(this.graphics.x, this.graphics.y);
+    }
+
+    addToGameQuick() {
+        this.game.app.stage.addChild(this.graphics);
+        this.game.sprites.push(this);
+    }
+
+    removeFromGameQuick() {
+        this.game.app.stage.removeChild(this.graphics);
+        this.game.sprites.filter(sprite => sprite !== this);
+    }
 
     update(delta: number) {
         if (this.acceleration.length > 0) {
@@ -29,12 +47,12 @@ abstract class BasicGraphics {
 
     restrictVelocity(restrictVelocityTo: number) {
         if (this.velocity.length > restrictVelocityTo) {
-            this.velocity.length *= .99;
+            this.velocity.length *= 0.99;
         }
         if (this.velocity.length < 0) {
             this.velocity.length = 0;
         }
-        this.velocity.length *= .995;
+        this.velocity.length *= 0.995;
     }
 
     keepOnCanvas() {
@@ -50,6 +68,16 @@ abstract class BasicGraphics {
         if (this.graphics.y < -this.size) {
             this.graphics.y = this.game.app.view.height + this.size;
         }
+    }
+
+    getCombinedAttractionFromAttractors(
+        mode: GravityMode = GravityMode.NORMAL
+    ) {
+        return this.attractors.reduce(
+            (acc, attractor) =>
+                acc.addCoordinate(getAttractionFrom(this, attractor, mode)),
+            new Coordinate()
+        );
     }
 }
 
